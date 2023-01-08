@@ -44,8 +44,15 @@ export class UserController {
     return this.userService.updateProfile(+id, dto);
   }
 
+  @Auth()
   @Get('find/projects')
   async projects() {
     return this.userService.projectsFind();
+  }
+
+  @Auth()
+  @Get('find/projects/by-id/:id')
+  async byIdProjects(@Param('id') id: string) {
+    return this.userService.byIdProjectsFind(+id);
   }
 }

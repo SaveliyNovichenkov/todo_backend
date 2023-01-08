@@ -35,6 +35,7 @@ export class ProjectService {
     const project = this.projectRepository.findOne({
       relations: {
         todos: true,
+        user: true,
       },
       where: {
         id,
@@ -52,6 +53,16 @@ export class ProjectService {
   }
 
   async deleteProject(id: number) {
+    const todos = this.todoRepository.find({
+      where: {
+        project: {
+          id: id,
+        },
+      },
+    });
+    const todosId = (await todos).map((todo) => todo.id + ' ');
+    todosId.forEach((id) => this.todoRepository.delete(id));
+
     return this.projectRepository.delete({ id });
   }
 

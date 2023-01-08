@@ -58,7 +58,23 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
+  async byIdProjectsFind(id: number) {
+    const projects = this.projectRepository.find({
+      where: {
+        user: {
+          id: id,
+        },
+      },
+    });
+    if (!projects) throw new NotFoundException('Задание не найдено!');
+    return projects;
+  }
+
   async projectsFind() {
-    return this.projectRepository.find({});
+    return this.projectRepository.find({
+      relations: {
+        user: true,
+      },
+    });
   }
 }
